@@ -9,21 +9,58 @@ var shows;
 function parse(d) {
     var objs  = d.getElementsByClassName('ind-show');
     var anime = document.getElementById('anime');
+    console.log(objs);
 
     // Read all the shows.
     [].forEach.call(objs, function (o) {
-        anime.appendChild(o);
+        //anime.appendChild(o);
+        console.log(o.firstChild.href);
     });
 }
 
-// Retrieve the shows from HorribleSubs.info
-function get() {
+// Make AJAX XML HTTP Request to get horriblesubs.info's DOM object.
+function makeAjax() {
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = "document";
+    return xhttp;
+}
+
+// Get show image from show web page.
+function getShowImage() {
+    var i = 0;
+    for (show of shows) {
+        if (i === 50)
+            break;
+
+        var xhttp = makeAjax();
+        xhttp.onreadystatechange = function() {
+            // Was GET successful?
+            if (this.readyState === 4 && this.status === 200) {
+                var imgs  = this.response.getElementsByClassName('series-image');
+                var anime = document.getElementById('anime');
+
+                [].forEach.call(imgs, function (o) {
+                    anime.appendChild(o.firstChild);
+                })
+            }
+        }
+        xhttp.open("GET",                // Do a HTTP GET.
+                   show.firstChild.href, // Get link to show web page.
+                   true);                // Do it asynchronously!
+        xhttp.send();
+
+        i++;
+    }
+}
+
+// Retrieve the shows from HorribleSubs.info
+function getShows() {
+    var xhttp = makeAjax();
     xhttp.onreadystatechange = function() {
+        // Was GET successful?
         if (this.readyState === 4 && this.status === 200) {
-            shows = this.response;
-            parse(shows);
+            shows = this.response.getElementsByClassName('ind-show');
+            getShowImage();
         }
     };
     xhttp.open("GET", 'http://horriblesubs.info/shows/', true);
