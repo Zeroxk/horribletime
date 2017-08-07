@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="app.css">
+    <head>
+        <meta charset="UTF-8">
 
-    <!-- Window title -->
-    <title>HorribleTime!</title>
+        <!-- The app's CSS style -->
+        <link rel="stylesheet" type="text/css" href="app.css">
+
+        <!-- Library for retrieving show information from the site -->
+        <script src="hsub.js"></script>
+
+        <!-- Window title -->
+        <title>HorribleTime!</title>
   </head>
 
   <body>
-  </body>
+      <!-- Upper bar -->
+      <div>
+          <!-- Filter away shows -->
+          <input id="filter" type="text" placeholder="Filter" oninput="search()" \>
+          <span>Bokhylle</span>
+          <span>Liste</span>
+      </div>
 
+      <!-- Show anime shows provided by Horriblesubs -->
+  </body>
 </html>
