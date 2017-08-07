@@ -13,15 +13,17 @@
         <title>HorribleTime!</title>
   </head>
 
-  <body>
+  <body onload="get()">
       <!-- Upper bar -->
       <div>
           <!-- Filter away shows -->
-          <input id="filter" type="text" placeholder="Filter" oninput="search()" \>
+          <input id="filter" type="text" placeholder="Filter" oninput="filter()" \>
           <span>Bokhylle</span>
-          <span>Liste</span>
+          <span>Bildeliste</span>
+          <span>Tekstliste</span>
       </div>
 
       <!-- Show anime shows provided by Horriblesubs -->
+      <div id="anime"></div>
   </body>
 </html>
