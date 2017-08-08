@@ -2,9 +2,6 @@
 // hsub: A library for retrieving and reading data from horriblesubs.info
 //
 
-// Contains all the shows.
-var shows;
-
 // Read the shows on the site into a list.
 function parse(d) {
     var objs  = d.getElementsByClassName('ind-show');
@@ -71,7 +68,8 @@ function emptyBody() {
 // Anime show.
 class Show {
     constructor(showDocObj) {
-        this.href = showDocObj.firstChild.href;
+        this.href  = showDocObj.firstChild.href;
+        this.title = showDocObj.firstChild.innerText;
         selfDoDoc(this,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
                   this.href,
                   this.setBoxArt);
@@ -81,42 +79,55 @@ class Show {
     setBoxArt(self, response) {
         var imgs         = response.getElementsByClassName('series-image');
         self.img         = imgs[0].firstChild;
+        self.img.page    = response;
+        self.img.title   = self.title;
+        self.img.href    = self.href;
         self.img.onclick = boxartClick;
         document.getElementById('anime').appendChild(self.img);
     }
 }
 
-var showObjects = [];
+// Saves all the references to the show to not get removed by the garbage collector.
+var shows = [];
 
-// Called when user clicks on a box art.
-function boxartClick() {
-    // TODO: Change to new web page.
-    emptyBody();
-    doDoc('', function (response) {
-    });
+function getShowId(page) {
+    var text = page.getElementsByClassName('entry-content')[0].childNodes[5].firstChild.innerText;
+    return text.split('=')[1].replace(/[=;\s]/g, '');
 }
 
-function asd() {
-    var imgs  = this.response.getElementsByClassName('series-image');
-    var anime = document.getElementById('anime');
-    [].forEach.call(imgs, function (o) {
-        o.firstChild.onclick = boxartClick;
-        anime.appendChild(o.firstChild);
-    })
+// TODO: Change to new web page.
+function boxartClick() { // Called when user clicks on a box art.
+    emptyBody();
+
+    // Insert title.
+    document.body.insertAdjacentHTML('afterbegin', '<h3>'+this.title+'<h3');
+    // Insert box art.
+    document.body.appendChild(this);
+    // Insert description.
+    document.body.appendChild(this.page.getElementsByClassName('series-desc')[0]);
+
+    // Ask user where to save the episodes downloaded.
+    document.body.insertAdjacentHTML('beforeend', '<button onclick="openFileDialog()">Save</button>');
+
+    // Display episodes.
+    selfDoDoc(document.body, 'http://horriblesubs.info/lib/getshows.php?type=show&showid='+getShowId(this.page), function (self, response) {
+        self.appendChild(response.body);
+    });
 }
 
 // Retrieve the shows from HorribleSubs.info
 function getShows() {
     doDoc('http://horriblesubs.info/shows/', function(response) {
-        shows = response.getElementsByClassName('ind-show');
-        var i = 0;
-        for (s of shows) {
-            if (i === 3)
+        var showdocs = response.getElementsByClassName('ind-show');
+        var i        = 0;
+
+        for (s of showdocs) {
+            if (i === 5)
                 break;
-            showObjects.push(new Show(s));
-           i++;
+            // Save reference to not get GC'ed.
+            shows.push(new Show(s));
+            i++;
         }
-        console.log(showObjects);
     });
 }
 
