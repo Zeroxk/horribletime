@@ -96,6 +96,9 @@ function getShowId(page) {
     return text.split('=')[1].replace(/[=;\s]/g, '');
 }
 
+var torrentStream = require('torrent-stream');
+//var engine        = torrentStream('magnet:my-magnet-link');
+
 // Change to the show page.
 function boxartClick() { // Called when user clicks on a box art.
     emptyBody();
@@ -103,6 +106,7 @@ function boxartClick() { // Called when user clicks on a box art.
     // Insert title.
     document.body.insertAdjacentHTML('afterbegin', '<h3>'+this.title+'<h3');
     // Insert box art.
+    this.onclick = null;
     document.body.appendChild(this);
     // Insert description.
     document.body.appendChild(this.page.getElementsByClassName('series-desc')[0]);
