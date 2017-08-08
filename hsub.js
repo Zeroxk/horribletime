@@ -90,6 +90,7 @@ class Show {
 // Saves all the references to the show to not get removed by the garbage collector.
 var shows = [];
 
+// Get the id of a show from the web page.
 function getShowId(page) {
     var text = page.getElementsByClassName('entry-content')[0].childNodes[5].firstChild.innerText;
     return text.split('=')[1].replace(/[=;\s]/g, '');
