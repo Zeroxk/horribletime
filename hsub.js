@@ -95,7 +95,7 @@ function getShowId(page) {
     return text.split('=')[1].replace(/[=;\s]/g, '');
 }
 
-// TODO: Change to new web page.
+// Change to the show page.
 function boxartClick() { // Called when user clicks on a box art.
     emptyBody();
 
@@ -110,7 +110,9 @@ function boxartClick() { // Called when user clicks on a box art.
     document.body.insertAdjacentHTML('beforeend', '<button onclick="openFileDialog()">Save</button>');
 
     // Display episodes.
-    selfDoDoc(document.body, 'http://horriblesubs.info/lib/getshows.php?type=show&showid='+getShowId(this.page), function (self, response) {
+    selfDoDoc(document.body,
+              'http://horriblesubs.info/lib/getshows.php?type=show&showid=' + getShowId(this.page),
+    function (self, response) {
         self.appendChild(response.body);
     });
 }
