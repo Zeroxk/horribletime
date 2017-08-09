@@ -101,6 +101,7 @@ var torrentStream = require('torrent-stream');
 
 // Change to the show page.
 function boxartClick() { // Called when user clicks on a box art.
+    // Clear the web page.
     emptyBody();
 
     // Insert title.
