@@ -128,10 +128,12 @@ function stream(magnet) {
 	});
 }
 
+// Reverse character string.
 function reverse(s) {
     return s.split("").reverse().join("");
 }
 
+// Parse the magnet links from the show page.
 function parseMagnetLinks(r) {
     var shows = [];
 
@@ -164,7 +166,8 @@ function parseMagnetLinks(r) {
     return shows;
 }
 
-function createEpisodeRows(page) {
+// Display the episodes in a row.
+function displayEpisodeRows(page) {
     // Display episodes.
     selfDoDoc(document.body,
               'http://horriblesubs.info/lib/getshows.php?type=show&showid=' + getShowId(page),
@@ -194,7 +197,8 @@ function boxartClick() { // Called when user clicks on a box art.
     // Ask user where to save the episodes downloaded.
     document.body.insertAdjacentHTML('beforeend', '<button onclick="openFileDialog()">Save</button><br />');
 
-    createEpisodeRows(this.page);
+    // Display the episodes in a row.
+    displayEpisodeRows(this.page);
 }
 
 // Retrieve the shows from HorribleSubs.info
