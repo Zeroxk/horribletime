@@ -1,5 +1,5 @@
 //
-// hsub: A library for retrieving and reading data from horriblesubs.info
+// hsub: A library for retrieving and reading data from horriblesubs.info.
 //
 
 // Read the shows on the site into a list.
@@ -27,9 +27,8 @@ function doDoc(url, f) {
     var xhttp = makeAjax();
     xhttp.onreadystatechange = function() {
         // Was GET successful?
-        if (this.readyState === 4 && this.status === 200) {
+        if (this.readyState === 4 && this.status === 200)
             f(this.response);
-        }
     }
     xhttp.open("GET",                // Do a HTTP GET.
                url,
@@ -42,9 +41,8 @@ function selfDoDoc(self, url, f) {
     var xhttp = makeAjax();
     xhttp.onreadystatechange = function() {
         // Was GET successful?
-        if (this.readyState === 4 && this.status === 200) {
+        if (this.readyState === 4 && this.status === 200)
             f(self, this.response);
-        }
     }
     xhttp.open("GET",                // Do a HTTP GET.
                url,
