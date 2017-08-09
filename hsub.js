@@ -115,7 +115,6 @@ function stream(magnet) {
     engine.on('ready', function() {
         engine.files.forEach(function(file) {
             console.log('Filename:', file.name);
-            files.push(file);
             var stream = file.createReadStream();
             // stream is readable stream to containing the file content
         });
@@ -202,17 +201,11 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 5)
+            if (i === 20)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
             i++;
         }
     });
-}
-
-// Filter out shows using the user input written in the input textbox.
-function filter() {
-    var filter = document.getElementById('filter');
-    var anime  = document.getElementById('anime');
 }
