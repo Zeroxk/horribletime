@@ -2,19 +2,6 @@
 // hsub: A library for retrieving and reading data from horriblesubs.info.
 //
 
-// Read the shows on the site into a list.
-function parse(d) {
-    var objs  = d.getElementsByClassName('ind-show');
-    var anime = document.getElementById('anime');
-    console.log(objs);
-
-    // Read all the shows.
-    [].forEach.call(objs, function (o) {
-        //anime.appendChild(o);
-        console.log(o.firstChild.href);
-    });
-}
-
 // Make AJAX XML HTTP Request to get horriblesubs.info's DOM object.
 function makeAjax() {
     var xhttp = new XMLHttpRequest();
