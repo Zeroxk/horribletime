@@ -44,6 +44,7 @@ var savedir = null;
 function openFileDialog() {
     const {dialog} = require('electron').remote;
     savedir = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+    document.getElementById('savedir').innerText = savedir;
 }
 
 // Clear the <body>-tag in document.
@@ -72,7 +73,7 @@ class Show {
         self.img.title   = self.title;
         self.img.href    = self.href;
         self.img.onclick = boxartClick;
-        document.getElementById('anime').appendChild(self.img);
+        document.body.appendChild(self.img);
     }
 }
 
@@ -90,14 +91,16 @@ var torrentStream = require('torrent-stream');
 
 // Stream the file.
 function stream(magnet) {
-    if (savedir === null) {
-        alert("No save directory specified!");
-        return;
-    }
+    var engine;
 
-    var engine = torrentStream(magnet, {
-        path: savedir[0]
-    });
+    if (savedir === null) {
+        console.log("Use temporary directory.");
+        engine = torrentStream(magnet);
+    } else {
+        engine = torrentStream(magnet, {
+            path: savedir[0]
+        });
+    }
 
     engine.on('ready', function() {
         engine.files.forEach(function(file) {
@@ -174,8 +177,12 @@ function boxartClick() { // Called when user clicks on a box art.
     // Insert description.
     document.body.appendChild(this.page.getElementsByClassName('series-desc')[0]);
 
+    // Breakline!
+    document.body.insertAdjacentHTML('beforeend', '<br />');
     // Ask user where to save the episodes downloaded.
-    document.body.insertAdjacentHTML('beforeend', '<button onclick="openFileDialog()">Save</button><br />');
+    document.body.insertAdjacentHTML('beforeend', '<span id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
+    // Breakline!
+    document.body.insertAdjacentHTML('beforeend', '<br />');
 
     // Display the episodes in a row.
     displayEpisodeRows(this.page);
@@ -188,7 +195,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 20)
+            if (i === 100)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
