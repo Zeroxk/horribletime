@@ -101,12 +101,6 @@ function getShowId(page) {
 // Create the streaming torrent engine.
 var torrentStream = require('torrent-stream');
 
-const testmagnet = 'magnet:?xt=urn:btih:7JDH3N6F5AK5TNMMGVV37EYBFDJR67OM&amp;tr=http://nyaa.tracker.wf:7777/announce&amp;tr=udp://tracker.coppersurfer.tk:6969/announce&amp;tr=udp://tracker.internetwarriors.net:1337/announce&amp;tr=udp://tracker.leechers-paradise.org:6969/announce&amp;tr=http://tracker.internetwarriors.net:1337/announce&amp;tr=udp://tracker.opentrackr.org:1337/announce&amp;tr=http://tracker.opentrackr.org:1337/announce&amp;tr=udp://tracker.zer0day.to:1337/announce&amp;tr=http://explodie.org:6969/announce&amp;tr=http://p4p.arenabg.com:1337/announce&amp;tr=udp://p4p.arenabg.com:1337/announce&amp;tr=http://mgtracker.org:6969/announce&amp;tr=udp://mgtracker.org:6969/announce';
-
-const testmagnet2 = 'magnet:?xt=urn:btih:7WPHHMMLZHM26J2HYVAD7EL5T2GP422P&dn=%5BUTW%5D_Fate_Apocrypha_-_06_%5Bh264-720p%5D%5BC7A63CDA%5D.mkv&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.doko.moe%3A6969&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce'
-
-var files = [];
-
 // Stream the file.
 function stream(magnet) {
     if (savedir === null) {
