@@ -191,17 +191,17 @@ function displayShowPage() { // Called when user clicks on a box art.
     document.body.insertAdjacentHTML('afterbegin', '<h3>'+this.title+'</h3>');
 
     // Insert show container.
-    var show = document.createElement('div');
+    var show       = document.createElement('div');
     show.className = 'flex-container';
 
     // Insert box art.
-    this.onclick = null; // 'this' is the <img> that got clicked.
+    this.onclick   = null; // 'this' is the <img> that got clicked.
     this.className = 'flex-boxart';
     show.appendChild(this);
 
     // Insert description.
-    var desc    = this.page.getElementsByClassName('series-desc')[0];
-    var divdesc = document.createElement('div');
+    var desc          = this.page.getElementsByClassName('series-desc')[0];
+    var divdesc       = document.createElement('div');
     divdesc.innerText = desc.innerText;
     divdesc.className = 'flex-desc';
     show.appendChild(divdesc);
