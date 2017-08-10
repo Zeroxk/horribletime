@@ -2,6 +2,15 @@
 // hsub: A library for retrieving and reading data from horriblesubs.info.
 //
 
+// Current AJAX requests.
+var reqs = [];
+
+// Stop all AJAX requests.
+function stopAjaxRequests() {
+    for (r of reqs)
+        r.abort();
+}
+
 // Make AJAX XML HTTP Request to get horriblesubs.info's DOM object.
 function makeAjax() {
     var xhttp = new XMLHttpRequest();
@@ -12,6 +21,7 @@ function makeAjax() {
 // Asynchronously get document object from URL and respond.
 function doDoc(url, f) {
     var xhttp = makeAjax();
+    reqs.push(xhttp);
     xhttp.onreadystatechange = function() {
         // Was GET successful?
         if (this.readyState === 4 && this.status === 200)
@@ -26,6 +36,7 @@ function doDoc(url, f) {
 // Get document object from URL and respond with self.
 function selfDoDoc(self, url, f) {
     var xhttp = makeAjax();
+    reqs.push(xhttp);
     xhttp.onreadystatechange = function() {
         // Was GET successful?
         if (this.readyState === 4 && this.status === 200)
@@ -50,9 +61,8 @@ function openFileDialog() {
 // Clear the <body>-tag in document.
 function emptyBody() {
     var node = document.body;
-    while (node.firstChild) {
+    while (node.firstChild)
         node.removeChild(node.firstChild);
-    }
 }
 
 // Anime show.
@@ -73,6 +83,7 @@ class Show {
         self.img.title   = self.title;
         self.img.href    = self.href;
         self.img.onclick = displayShowPage;
+
         document.getElementById('shows').appendChild(self.img);
     }
 }
@@ -151,13 +162,15 @@ function parseMagnetLinks(r) {
 
 // Display the episodes in a row.
 function displayEpisodeRows(page) {
-    // Display episodes.
+    // Get the episodes from their PHP API.
     selfDoDoc(document.body,
               'http://horriblesubs.info/lib/getshows.php?type=show&showid=' + getShowId(page),
+    // Display the episodes.
     function (self, response) {
         // Document containing magnet links to the episodes.
         var links = parseMagnetLinks(response.body);
         for (l of links) {
+            // Build a row with stream button.
             var s = '<span>' + l.ep + ' - ' + l.quality + '</span><button onclick="stream(\'' + l.magnet + '\')">Stream</button><br />';
             document.body.insertAdjacentHTML('beforeend', s);
         }
@@ -166,6 +179,9 @@ function displayEpisodeRows(page) {
 
 // Change to the show page.
 function displayShowPage() { // Called when user clicks on a box art.
+    // Stop retrieving show box arts.
+    stopAjaxRequests();
+
     // Clear the web page.
     emptyBody();
 
@@ -195,7 +211,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 100)
+            if (i === 10)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
@@ -204,7 +220,10 @@ function getShows() {
     });
 }
 
+// Initialize <body>.
 function init() {
+    // Create a <div> to display the show boxarts.
     document.body.insertAdjacentHTML('afterbegin', '<div id="shows"></div>');
+    // Get and display show boxarts.
     getShows();
 }
