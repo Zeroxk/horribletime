@@ -18,6 +18,14 @@ function makeAjax() {
     return xhttp;
 }
 
+// Do the AJAX GET command.
+function asyncGet(xhttp, url) {
+    xhttp.open("GET", // Do a HTTP GET.
+               url,   // to this website pointed by this URL.
+               true); // Do it asynchronously!
+    xhttp.send();
+}
+
 // Asynchronously get document object from URL and respond.
 function doDoc(url, f) {
     var xhttp = makeAjax();
@@ -27,10 +35,7 @@ function doDoc(url, f) {
         if (this.readyState === 4 && this.status === 200)
             f(this.response);
     }
-    xhttp.open("GET",                // Do a HTTP GET.
-               url,                  // to this website pointed by this URL.
-               true);                // Do it asynchronously!
-    xhttp.send();
+    asyncGet(xhttp, url);
 }
 
 // Get document object from URL and respond with self.
@@ -42,10 +47,7 @@ function selfDoDoc(self, url, f) {
         if (this.readyState === 4 && this.status === 200)
             f(self, this.response);
     }
-    xhttp.open("GET",                // Do a HTTP GET.
-               url,                  // to this website pointed by this URL.
-               true);                // Do it asynchronously!
-    xhttp.send();
+    asyncGet(xhttp, url);
 }
 
 // Save directory.
