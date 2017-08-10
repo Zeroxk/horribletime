@@ -72,8 +72,8 @@ class Show {
         self.img.page    = response;
         self.img.title   = self.title;
         self.img.href    = self.href;
-        self.img.onclick = boxartClick;
-        document.body.appendChild(self.img);
+        self.img.onclick = displayShowPage;
+        document.getElementById('shows').appendChild(self.img);
     }
 }
 
@@ -165,7 +165,7 @@ function displayEpisodeRows(page) {
 }
 
 // Change to the show page.
-function boxartClick() { // Called when user clicks on a box art.
+function displayShowPage() { // Called when user clicks on a box art.
     // Clear the web page.
     emptyBody();
 
@@ -202,4 +202,9 @@ function getShows() {
             i++;
         }
     });
+}
+
+function init() {
+    document.body.insertAdjacentHTML('afterbegin', '<div id="shows"></div>');
+    getShows();
 }
