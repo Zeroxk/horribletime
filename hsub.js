@@ -18,7 +18,7 @@ function doDoc(url, f) {
             f(this.response);
     }
     xhttp.open("GET",                // Do a HTTP GET.
-               url,
+               url,                  // to this website pointed by this URL.
                true);                // Do it asynchronously!
     xhttp.send();
 }
@@ -32,7 +32,7 @@ function selfDoDoc(self, url, f) {
             f(self, this.response);
     }
     xhttp.open("GET",                // Do a HTTP GET.
-               url,
+               url,                  // to this website pointed by this URL.
                true);                // Do it asynchronously!
     xhttp.send();
 }
@@ -43,7 +43,7 @@ var savedir = null;
 // Ask user where to save the downloaded files.
 function openFileDialog() {
     const {dialog} = require('electron').remote;
-    savedir = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+    savedir        = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
     document.getElementById('savedir').innerText = savedir;
 }
 
