@@ -1,3 +1,7 @@
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
 .flex-container {
     display: flex;
     width: 100%;

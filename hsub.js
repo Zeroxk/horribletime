@@ -190,8 +190,10 @@ function displayShowPage() { // Called when user clicks on a box art.
     // Clear the web page.
     emptyBody();
 
+    // Insert Back button.
+    document.body.insertAdjacentHTML('beforeend', '<button onclick="getShows()">Back</button>');
     // Insert title.
-    document.body.insertAdjacentHTML('afterbegin', '<h3>'+this.title+'</h3>');
+    document.body.insertAdjacentHTML('beforeend', '<h3>'+this.title+'</h3>');
 
     // Insert show container.
     var show       = document.createElement('div');
@@ -225,12 +227,19 @@ function displayShowPage() { // Called when user clicks on a box art.
 
 // Retrieve the shows from HorribleSubs.info
 function getShows() {
+    // Clear <body>.
+    emptyBody();
+
+    // Create a <div> to display the show boxarts.
+    document.body.insertAdjacentHTML('afterbegin', '<div id="shows"></div>');
+
+    // Retrieve shows.
     doDoc('http://horriblesubs.info/shows/', function(response) {
         var showdocs = response.getElementsByClassName('ind-show');
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 25)
+            if (i === 100)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
@@ -241,8 +250,6 @@ function getShows() {
 
 // Initialize <body>.
 function init() {
-    // Create a <div> to display the show boxarts.
-    document.body.insertAdjacentHTML('afterbegin', '<div id="shows"></div>');
     // Get and display show boxarts.
     getShows();
 }
