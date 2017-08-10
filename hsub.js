@@ -69,24 +69,27 @@ function emptyBody() {
 
 // Anime show.
 class Show {
+    // Construct anime show.
     constructor(showDocObj) {
         this.href  = showDocObj.firstChild.href;
         this.title = showDocObj.firstChild.innerText;
         selfDoDoc(this,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
                   this.href,
-                  this.setBoxArt);
+                  this.addBoxArt);
     }
 
-    // Set anime show box art image.
-    setBoxArt(self, response) {
-        var imgs         = response.getElementsByClassName('series-image');
-        self.img         = imgs[0].firstChild;
-        self.img.page    = response;
-        self.img.title   = self.title;
-        self.img.href    = self.href;
-        self.img.onclick = displayShowPage;
+    // Add anime show box art image to <body>.
+    addBoxArt(self, response) {
+        var imgs = response.getElementsByClassName('series-image');
+        var img = imgs[0].firstChild;
+        img.page      = response;
+        img.className = 'boxart';
+        img.title     = self.title;
+        img.href      = self.href;
+        img.onclick   = displayShowPage;
+        self.img      = img;
 
-        document.getElementById('shows').appendChild(self.img);
+        document.getElementById('shows').appendChild(img);
     }
 }
 
@@ -209,7 +212,6 @@ function displayShowPage() { // Called when user clicks on a box art.
     // Insert the container to <body>.
     document.body.appendChild(show);
 
-
     // Breakline!
     document.body.insertAdjacentHTML('beforeend', '<br />');
     // Ask user where to save the episodes downloaded.
@@ -228,7 +230,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 10)
+            if (i === 25)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
