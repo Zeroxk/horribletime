@@ -22,6 +22,8 @@ function makeAjax() {
 
 // Do the AJAX GET command.
 function asyncGet(xhttp, url) {
+    if (url === undefined)
+        return;
     xhttp.open("GET", // Do a HTTP GET.
                url,   // to this website pointed by this URL.
                true); // Do it asynchronously!
