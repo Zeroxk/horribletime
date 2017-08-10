@@ -88,7 +88,6 @@ class Show {
         img.href      = self.href;
         img.onclick   = displayShowPage;
         self.img      = img;
-
         document.getElementById('shows').appendChild(img);
     }
 }
@@ -217,7 +216,12 @@ function displayShowPage() { // Called when user clicks on a box art.
     // Breakline!
     document.body.insertAdjacentHTML('beforeend', '<br />');
     // Ask user where to save the episodes downloaded.
-    document.body.insertAdjacentHTML('beforeend', '<span id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
+    if (savedir === null)
+        document.body.insertAdjacentHTML('beforeend', '<span id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
+    else {
+        document.body.insertAdjacentHTML('beforeend', '<span id="savedir">'+savedir+'</span><button onclick="openFileDialog()">Change</button><br />');
+    }
+
     // Breakline!
     document.body.insertAdjacentHTML('beforeend', '<br />');
 
