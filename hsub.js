@@ -1,6 +1,8 @@
 //
 // hsub: A library for retrieving and reading data from horriblesubs.info.
 //
+// Code is shitty and hacked together as fast as possible. Coding principles be damned!
+//
 
 // Current AJAX requests.
 var reqs = [];
@@ -136,6 +138,8 @@ function parseMagnetLinks(r) {
     var shows = [];
 
     for (e of r.childNodes) {
+        if (e === undefined)
+            continue;
         if (e.className.includes("release-links")) {
             var count = 0;
             var quality = '',
@@ -243,7 +247,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 100)
+            if (i === 200)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
