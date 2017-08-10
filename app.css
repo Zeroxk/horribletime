@@ -1,0 +1,13 @@
+.flex-container {
+    display: flex;
+    width: 100%;
+}
+
+.flex-boxart {
+    width: 20%;
+}
+
+.flex-desc {
+    width: 80%;
+    margin: 5px;
+}
