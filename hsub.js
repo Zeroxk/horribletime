@@ -199,7 +199,7 @@ function displayShowPage() { // Called when user clicks on a box art.
 
     // Insert box art.
     this.onclick   = null; // 'this' is the <img> that got clicked.
-    this.className = 'flex-boxart';
+    this.className = 'boxart';
     show.appendChild(this);
 
     // Insert description.
