@@ -1,5 +1,7 @@
 body {
     font-family: "Open Sans", sans-serif;
+    color: white;
+    background-color: #151515;
 }
 
 .common-margin {
@@ -15,16 +17,25 @@ body {
     margin: 10px;
 }
 
-#shows {
+.flex-shows {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 }
 
 .boxart {
+    /*
     border: double;
     border-radius: 10px;
+    */
     width: 225px;
     margin: 10px;
-    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);*/
+}
+
+.title-text {
+    /*text-shadow: 0px 0px 30px rgba(150, 150, 150, 0.2);*/
+    font-size: large;
+    width: 225px;
+    word-wrap: break-word;
 }

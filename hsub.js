@@ -89,13 +89,22 @@ class Show {
     addBoxArt(self, response) {
         var imgs = response.getElementsByClassName('series-image');
         var img = imgs[0].firstChild;
+
+        // Change <img> for our purposes.
         img.page      = response;
         img.className = 'boxart';
         img.title     = self.title;
         img.href      = self.href;
         img.onclick   = displayShowPage;
+
+        // Save for later use.
         self.img      = img;
-        document.getElementById('shows').appendChild(img);
+
+        var div = document.createElement('div');
+        div.appendChild(img);
+        div.insertAdjacentHTML('beforeend', '<div class="title-text common-margin"><b>' + self.title + '</b></div>')
+
+        document.getElementById('shows').appendChild(div);
     }
 }
 
@@ -250,7 +259,7 @@ function getShows() {
     emptyBody();
 
     // Create a <div> to display the show boxarts.
-    document.body.insertAdjacentHTML('afterbegin', '<div id="shows"></div>');
+    document.body.insertAdjacentHTML('afterbegin', '<div class="flex-shows" id="shows"></div>');
 
     // Retrieve shows.
     doDoc('http://horriblesubs.info/shows/', function(response) {
@@ -258,7 +267,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 100)
+            if (i === 300)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
