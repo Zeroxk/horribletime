@@ -60,7 +60,10 @@ var savedir = null;
 // Ask user where to save the downloaded files.
 function openFileDialog() {
     const {dialog} = require('electron').remote;
-    savedir        = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+    var dir = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+    if (dir === undefined)
+        return;
+    savedir = dir;
     document.getElementById('savedir').innerText = savedir;
 }
 
@@ -180,9 +183,19 @@ function displayEpisodeRows(page) {
         // Document containing magnet links to the episodes.
         var links = parseMagnetLinks(response.body);
         for (l of links) {
+            var e = document.getElementById(l.ep);
+            if (e !== null) {
+                e.innerHTML = e.innerHTML + '<button onclick="stream(\'' + l.magnet + '\')">' + l.quality + '</button>'
+                continue;
+            }
+
             // Build a row with stream button.
-            var s = '<span>' + l.ep + ' - ' + l.quality + '</span><button onclick="stream(\'' + l.magnet + '\')">Stream</button><br />';
-            document.body.insertAdjacentHTML('beforeend', s);
+            var divel = document.createElement('div'); // the <div>-tag adds a breakline.
+            divel.className = 'common-margin';
+            divel.id = l.ep;
+            var s = '<span>' + l.ep + ': </span><button onclick="stream(\'' + l.magnet + '\')">' + l.quality + '</button>';
+            divel.insertAdjacentHTML('beforeend', s);
+            document.body.appendChild(divel);
         }
     });
 }
@@ -196,9 +209,9 @@ function displayShowPage() { // Called when user clicks on a box art.
     emptyBody();
 
     // Insert Back button.
-    document.body.insertAdjacentHTML('beforeend', '<button onclick="getShows()">Back</button>');
+    document.body.insertAdjacentHTML('beforeend', '<button class="common-margin" onclick="getShows()">Back</button>');
     // Insert title.
-    document.body.insertAdjacentHTML('beforeend', '<h3>'+this.title+'</h3>');
+    document.body.insertAdjacentHTML('beforeend', '<h3 class="common-margin">'+this.title+'</h3>');
 
     // Insert show container.
     var show       = document.createElement('div');
@@ -219,16 +232,13 @@ function displayShowPage() { // Called when user clicks on a box art.
     // Insert the container to <body>.
     document.body.appendChild(show);
 
-    // Breakline!
-    document.body.insertAdjacentHTML('beforeend', '<br />');
     // Ask user where to save the episodes downloaded.
+    document.body.insertAdjacentHTML('beforeend', '<br />');
     if (savedir === null)
-        document.body.insertAdjacentHTML('beforeend', '<span id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
+        document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
     else {
-        document.body.insertAdjacentHTML('beforeend', '<span id="savedir">'+savedir+'</span><button onclick="openFileDialog()">Change</button><br />');
+        document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">'+savedir+'</span><button onclick="openFileDialog()">Change</button><br />');
     }
-
-    // Breakline!
     document.body.insertAdjacentHTML('beforeend', '<br />');
 
     // Display the episodes in a row.
