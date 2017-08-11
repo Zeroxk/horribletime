@@ -236,9 +236,8 @@ function displayShowPage() { // Called when user clicks on a box art.
     document.body.insertAdjacentHTML('beforeend', '<br />');
     if (savedir === null)
         document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
-    else {
+    else
         document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">'+savedir+'</span><button onclick="openFileDialog()">Change</button><br />');
-    }
     document.body.insertAdjacentHTML('beforeend', '<br />');
 
     // Display the episodes in a row.
@@ -259,7 +258,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 200)
+            if (i === 100)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
