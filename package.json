@@ -1,12 +1,12 @@
 {
   "name": "HorribleTime!",
   "version": "1.0.0",
-  "description": "A Horrible time for Horrible persons.",
+  "description": "A Horrible Time for Horrible persons.",
   "main": "app.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/baosen/horribletime",
   "author": "baosen",
   "license": "GPLv3",
   "dependencies": {
