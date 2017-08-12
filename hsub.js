@@ -100,8 +100,14 @@ class Show {
         // Save for later use.
         self.img      = img;
 
+        // Create <div> for image to center it.
+        var divimg = document.createElement('div');
+        divimg.className = 'divboxart';
+        divimg.appendChild(img);
+
+        // Create <div> for box art.
         var div = document.createElement('div');
-        div.appendChild(img);
+        div.appendChild(divimg);
         div.insertAdjacentHTML('beforeend', '<div class="title-text common-margin"><b>' + self.title + '</b></div>')
 
         document.getElementById('shows').appendChild(div);
