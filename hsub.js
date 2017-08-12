@@ -74,6 +74,8 @@ function emptyBody() {
         node.removeChild(node.firstChild);
 }
 
+var showdoc = null;
+
 // Anime show.
 class Show {
     // Construct anime show.
@@ -87,6 +89,7 @@ class Show {
 
     // Add anime show box art image to <body>.
     addBoxArt(self, response) {
+        // Get the boxart of the show.
         var imgs = response.getElementsByClassName('series-image');
         var img = imgs[0].firstChild;
 
@@ -110,7 +113,10 @@ class Show {
         div.appendChild(divimg);
         div.insertAdjacentHTML('beforeend', '<div class="title-text common-margin"><b>' + self.title + '</b></div>')
 
-        document.getElementById('shows').appendChild(div);
+        // Append the show<div> into the <body>.
+        if (showdoc == null)
+            showdoc = document.getElementById('shows');
+        showdoc.appendChild(div);
     }
 }
 
@@ -217,11 +223,13 @@ function displayEpisodeRows(page) {
 
 // Change to the show page.
 function displayShowPage() { // Called when user clicks on a box art.
+    showdoc = document.getElementById('shows');
+
     // Stop retrieving show box arts.
     stopAjaxRequests();
 
     // Clear the web page.
-    emptyBody();
+    document.body.removeChild(showdoc);
 
     // Insert Back button.
     document.body.insertAdjacentHTML('beforeend', '<button class="common-margin" onclick="getShows()">Back</button>');
@@ -233,9 +241,9 @@ function displayShowPage() { // Called when user clicks on a box art.
     show.className = 'flex-container';
 
     // Insert box art.
-    this.onclick   = null; // 'this' is the <img> that got clicked.
-    this.className = 'boxart';
-    show.appendChild(this);
+    var bximg = this.cloneNode(); // 'this' is the <img> that got clicked.
+    bximg.onclick = null;
+    show.appendChild(bximg);
 
     // Insert description.
     var desc          = this.page.getElementsByClassName('series-desc')[0];
@@ -264,6 +272,11 @@ function getShows() {
     // Clear <body>.
     emptyBody();
 
+    if (showdoc != null) {
+        document.body.appendChild(showdoc);
+        return;
+    }
+
     // Create a <div> to display the show boxarts.
     document.body.insertAdjacentHTML('afterbegin', '<div class="flex-shows" id="shows"></div>');
 
@@ -273,7 +286,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 300)
+            if (i === 400)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
