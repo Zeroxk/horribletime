@@ -4,16 +4,10 @@
 // Code is shitty and hacked together as fast as possible. Coding principles be damned!
 //
 
-var $ = require('jquery');
-
-// Current AJAX requests.
-var reqs = [];
-
-// Stop all AJAX requests.
-function stopAjaxRequests() {
-    for (r of reqs)
-        r.abort();
-}
+// Import jQuery from npm.
+global.$ = require('jquery');
+// Import jQuery.appear from npm.
+require('jquery-appear-poetic');
 
 // Make AJAX XML HTTP Request to get horriblesubs.info's DOM object.
 function makeAjax() {
@@ -35,7 +29,6 @@ function asyncGet(xhttp, url) {
 // Asynchronously get document object from URL and respond.
 function doDoc(url, f) {
     var xhttp = makeAjax();
-    reqs.push(xhttp);
     xhttp.onreadystatechange = function() {
         // Was GET successful?
         if (this.readyState === 4 && this.status === 200)
@@ -47,7 +40,6 @@ function doDoc(url, f) {
 // Get document object from URL and respond with self.
 function selfDoDoc(self, url, f) {
     var xhttp = makeAjax();
-    reqs.push(xhttp);
     xhttp.onreadystatechange = function() {
         // Was GET successful?
         if (this.readyState === 4 && this.status === 200)
@@ -77,17 +69,58 @@ function emptyBody() {
 }
 
 var showdoc = null;
-var boxarts = [];
 
 // Anime show.
 class Show {
     // Construct anime show.
-    constructor(showDocObj) {
-        this.href  = showDocObj.firstChild.href;
-        this.title = showDocObj.firstChild.innerText;
-        selfDoDoc(this,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
-                  this.href,
-                  this.addBoxArt);
+    constructor(o) {
+        // Save link to show page.
+        this.href  = o.firstChild.href;
+        // Save show title.
+        this.title = o.firstChild.innerText;
+
+        // Create <div> for box art.
+        var div = document.createElement('div');
+
+        // Create <div> for image to center it.
+        var divimg = document.createElement('div');
+        divimg.className = 'divboxart';
+
+        // Append box art <div>.
+        div.appendChild(divimg);
+        // Append title.
+        div.insertAdjacentHTML('beforeend', '<div class="title-text common-margin" onclick="displayShowPage()"><b>' + this.title + '</b></div>')
+
+        // Save <div>.
+        this.boxartdiv = div;
+
+        // Download boxart image when the <div> is visible (appeared).
+        this.shown = false;
+        var self = this;
+        $.appear(divimg);
+        $(divimg).on('appear', function(e, appeared) {
+            // Check if has already been downloaded and shown.
+            if (self.shown)
+                return;
+
+            // Download and show boxart.
+            self.shown = true;
+            selfDoDoc(self,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
+                      self.href,
+                      self.addBoxArt);
+        });
+
+        // Append the show<div> into the web page.
+        if (showdoc == null)
+            showdoc = document.getElementById('shows');
+        showdoc.appendChild(div);
+        // Download and show <img> if it is visible (appeared).
+        if ($(divimg).is(':appeared')) {
+            self.shown = true;
+            selfDoDoc(self,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
+                      self.href,
+                      self.addBoxArt);
+        }
     }
 
     // Add anime show box art image to <body>.
@@ -97,30 +130,16 @@ class Show {
         var img = imgs[0].firstChild;
 
         // Change <img> for our purposes.
-        img.page      = response;
+        img.page      = response;        // Show page.
         img.className = 'boxart';
         img.title     = self.title;
         img.href      = self.href;
         img.onclick   = displayShowPage;
-
         // Save for later use.
         self.img      = img;
 
-        // Create <div> for image to center it.
-        var divimg = document.createElement('div');
-        divimg.className = 'divboxart';
-        divimg.appendChild(img);
-
-        // Create <div> for box art.
-        var div = document.createElement('div');
-        div.appendChild(divimg);
-        div.insertAdjacentHTML('beforeend', '<div class="title-text common-margin"><b>' + self.title + '</b></div>')
-        boxarts.push(div);
-
-        // Append the show<div> into the <body>.
-        if (showdoc == null)
-            showdoc = document.getElementById('shows');
-        showdoc.appendChild(div);
+        // Append image.
+        self.boxartdiv.firstChild.appendChild(img);
     }
 }
 
@@ -227,12 +246,9 @@ function displayEpisodeRows(page) {
 
 // Change to the show page.
 function displayShowPage() { // Called when user clicks on a box art.
-    showdoc = document.getElementById('shows');
-
-    // Stop retrieving show box arts.
-    stopAjaxRequests();
-
     // Clear the web page.
+    if (showdoc == null)
+        showdoc = document.getElementById('shows');
     document.body.removeChild(showdoc);
 
     // Insert Back button.
@@ -276,6 +292,7 @@ function getShows() {
     // Clear <body>.
     emptyBody();
 
+    // Show the anime shows/series.
     if (showdoc != null) {
         document.body.appendChild(showdoc);
         return;
@@ -287,29 +304,15 @@ function getShows() {
     // Retrieve shows.
     doDoc('http://horriblesubs.info/shows/', function(response) {
         var showdocs = response.getElementsByClassName('ind-show');
-        var i        = 0;
-
         for (s of showdocs) {
-            if (i === 100)
-                break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
-            i++;
         }
     });
 }
 
 // Initialize <body>.
 function init() {
-    /*
-    $(window).on('scroll', function() {
-        for (b of boxarts) {
-            if ($(b).is(':visible'))
-                console.log("I am visible!");
-        }
-    });
-    */
-
     // Get and display show boxarts.
     getShows();
 }
