@@ -160,8 +160,9 @@ function stream(magnet) {
     var engine;
 
     if (savedir === null) {
-        console.log("Use temporary directory.");
-        engine = torrentStream(magnet);
+        alert("No download directory is set!");
+        return;
+        //engine = torrentStream(magnet);
     } else {
         engine = torrentStream(magnet, {
             path: savedir[0]
@@ -170,7 +171,7 @@ function stream(magnet) {
 
     engine.on('ready', function() {
         engine.files.forEach(function(file) {
-            console.log('Filename:', file.name);
+            console.log('Downloading:', file.name);
             var stream = file.createReadStream();
             // stream is readable stream to containing the file content
         });
@@ -277,8 +278,9 @@ function displayShowPage() { // Called when user clicks on a box art.
 
     // Ask user where to save the episodes downloaded.
     document.body.insertAdjacentHTML('beforeend', '<br />');
-    if (savedir === null)
-        document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
+    if (savedir == null)
+        //document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">Temporary directory is used as download directory.</span><button onclick="openFileDialog()">Change</button><br />');
+        document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">No download directory is set.</span><button onclick="openFileDialog()">Change</button><br />');
     else
         document.body.insertAdjacentHTML('beforeend', '<span class="common-margin" id="savedir">'+savedir+'</span><button onclick="openFileDialog()">Change</button><br />');
     document.body.insertAdjacentHTML('beforeend', '<br />');
