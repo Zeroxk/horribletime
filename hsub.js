@@ -154,6 +154,7 @@ function getShowId(page) {
 
 // Create the streaming torrent engine.
 var torrentStream = require('torrent-stream');
+var streams = [];
 
 // Stream the file.
 function stream(magnet) {
@@ -162,20 +163,27 @@ function stream(magnet) {
     if (savedir === null) {
         alert("No download directory is set!");
         return;
-        //engine = torrentStream(magnet);
     } else {
+        console.log("Trying to fetch: " + magnet);
         engine = torrentStream(magnet, {
             path: savedir[0]
         });
     }
+    // Save to not get GC'ed.
+    streams.push(engine);
 
+    // Called after fetching the torrent from magnet.
     engine.on('ready', function() {
         engine.files.forEach(function(file) {
-            console.log('Downloading:', file.name);
-            var stream = file.createReadStream();
-            // stream is readable stream to containing the file content
+            console.log('Downloading: ', file.name);
+            var stream = file.createReadStream(); // stream is readable stream to containing the file content
         });
 	});
+
+    // Called when finished downloading the file.
+    engine.on('idle', function() {
+        console.log("Finished downloading: " + engine.files[0].name);
+    });
 }
 
 // Reverse character string.
