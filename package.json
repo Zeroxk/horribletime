@@ -11,6 +11,7 @@
   "license": "GPLv3",
   "dependencies": {
     "electron": "^1.6.2",
+    "jquery": "^3.2.1",
     "torrent-stream": "^1.0.3"
   }
 }

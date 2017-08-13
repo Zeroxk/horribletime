@@ -4,6 +4,8 @@
 // Code is shitty and hacked together as fast as possible. Coding principles be damned!
 //
 
+var $ = require('jquery');
+
 // Current AJAX requests.
 var reqs = [];
 
@@ -75,6 +77,7 @@ function emptyBody() {
 }
 
 var showdoc = null;
+var boxarts = [];
 
 // Anime show.
 class Show {
@@ -112,6 +115,7 @@ class Show {
         var div = document.createElement('div');
         div.appendChild(divimg);
         div.insertAdjacentHTML('beforeend', '<div class="title-text common-margin"><b>' + self.title + '</b></div>')
+        boxarts.push(div);
 
         // Append the show<div> into the <body>.
         if (showdoc == null)
@@ -286,7 +290,7 @@ function getShows() {
         var i        = 0;
 
         for (s of showdocs) {
-            if (i === 400)
+            if (i === 100)
                 break;
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
@@ -297,6 +301,15 @@ function getShows() {
 
 // Initialize <body>.
 function init() {
+    /*
+    $(window).on('scroll', function() {
+        for (b of boxarts) {
+            if ($(b).is(':visible'))
+                console.log("I am visible!");
+        }
+    });
+    */
+
     // Get and display show boxarts.
     getShows();
 }
