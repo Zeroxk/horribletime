@@ -226,31 +226,49 @@ function parseMagnetLinks(r) {
     return shows;
 }
 
+// Display the episodes and continue parsing recursively.
+var nextid = 0,
+    showid = 0;
+
+function handleEpisodeAPIResponse(self, response) {
+      // Is there more episodes to parse?
+      if (response.body.innerText === 'DONE')
+          return;
+
+      // Document containing magnet links to the episodes.
+      var links = parseMagnetLinks(response.body);
+      for (l of links) {
+          var e = document.getElementById(l.ep);
+          if (e !== null) {
+              e.innerHTML = e.innerHTML + '<button onclick="stream(\'' + l.magnet + '\')">' + l.quality + '</button>'
+              continue;
+          }
+
+          // Build a row with stream button.
+          var divel = document.createElement('div'); // the <div>-tag adds a breakline.
+          divel.className = 'common-margin';
+          divel.id = l.ep;
+          var s = '<span>' + l.ep + ': </span><button onclick="stream(\'' + l.magnet + '\')">' + l.quality + '</button>';
+          divel.insertAdjacentHTML('beforeend', s);
+          document.body.appendChild(divel);
+      }
+
+      // Look for more episodes.
+      ++nextid;
+      selfDoDoc(document.body,
+                'http://horriblesubs.info/lib/getshows.php?type=show&showid=' + showid + '&nextid=' + nextid,
+                handleEpisodeAPIResponse);
+}
+
 // Display the episodes in a row.
 function displayEpisodeRows(page) {
+    showid = getShowId(page);
+    nextid = 0;
+
     // Get the episodes from their PHP API.
     selfDoDoc(document.body,
-              'http://horriblesubs.info/lib/getshows.php?type=show&showid=' + getShowId(page),
-    // Display the episodes.
-    function (self, response) {
-        // Document containing magnet links to the episodes.
-        var links = parseMagnetLinks(response.body);
-        for (l of links) {
-            var e = document.getElementById(l.ep);
-            if (e !== null) {
-                e.innerHTML = e.innerHTML + '<button onclick="stream(\'' + l.magnet + '\')">' + l.quality + '</button>'
-                continue;
-            }
-
-            // Build a row with stream button.
-            var divel = document.createElement('div'); // the <div>-tag adds a breakline.
-            divel.className = 'common-margin';
-            divel.id = l.ep;
-            var s = '<span>' + l.ep + ': </span><button onclick="stream(\'' + l.magnet + '\')">' + l.quality + '</button>';
-            divel.insertAdjacentHTML('beforeend', s);
-            document.body.appendChild(divel);
-        }
-    });
+              'http://horriblesubs.info/lib/getshows.php?type=show&showid=' + showid,
+              handleEpisodeAPIResponse);
 }
 
 // Change to the show page.
