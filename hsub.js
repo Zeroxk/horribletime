@@ -333,6 +333,10 @@ function getShows() {
     doDoc('http://horriblesubs.info/shows/', function(response) {
         var showdocs = response.getElementsByClassName('ind-show');
         for (s of showdocs) {
+            // If show is empty and has no links.
+            if (s.className.includes('linkless'))
+                continue;
+
             // Save reference to not get GC'ed.
             shows.push(new Show(s));
         }
