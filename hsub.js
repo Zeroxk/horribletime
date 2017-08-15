@@ -272,7 +272,11 @@ function displayEpisodeRows(page) {
 }
 
 // Change to the show page.
+var currentScrollTop = 0;
+
 function displayShowPage() { // Called when user clicks on a box art.
+    currentScrollTop = document.body.scrollTop;
+
     // Clear the web page.
     if (showdoc == null)
         showdoc = document.getElementById('shows');
@@ -320,9 +324,11 @@ function getShows() {
     // Clear <body>.
     emptyBody();
 
-    // Show the anime shows/series.
+    // Show the previously gotten anime shows/series.
     if (showdoc != null) {
         document.body.appendChild(showdoc);
+        // Set old scrollTop position.
+        document.body.scrollTop = currentScrollTop;
         return;
     }
 
