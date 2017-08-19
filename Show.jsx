@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { container } from './Show.css'
-import { margin } from './Margin.css'
+import { container, margin } from './Show.css'
 
 // Page to display the show.
 export default class Show extends React.Component {
