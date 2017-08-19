@@ -1,8 +1,9 @@
-import React         from 'react';
+import React                from 'react';
+import ReactDOM             from 'react-dom';
 
-import { container } from './Shelf.css'
-import Show          from './Show.jsx'
-import Box           from './Box.jsx'
+import { container }        from './Shelf.css'
+import Show                 from './Show.jsx'
+import Box                  from './Box.jsx'
 import { doDoc, selfDoDoc } from './Ajax.jsx'
 
 // The shelf of anime show boxes.
@@ -12,10 +13,8 @@ export default class Shelf extends React.Component {
 
         // Set the current scroll-position of the <div>.
         this.state = {
-            scrollTop: 0,
             boxes: []
         };
-        document.body.scrollTop = 0;
 
         // Retrieve shows from horriblesubs.info.
         selfDoDoc(this, 'http://horriblesubs.info/shows/', function(self, response) {
@@ -28,6 +27,8 @@ export default class Shelf extends React.Component {
                 // Update boxes.
                 let b = self.state.boxes;
                 b.push(<Box show={s} />);
+
+                // Set new state, which re-renders.
                 self.setState({
                     boxes: b
                 });
@@ -36,9 +37,6 @@ export default class Shelf extends React.Component {
     }
 
     render() {
-        // Return back to the previous scroll position.
-        document.body.scrollTop = this.state.scrollTop;
-
         // Create a <div> to display the show boxarts.
         return (
             <div className={container}>
@@ -47,3 +45,7 @@ export default class Shelf extends React.Component {
         )
     }
 };
+
+export var shelf = document.createElement('div');
+ReactDOM.render(<Shelf />, shelf);
+document.body.appendChild(shelf);

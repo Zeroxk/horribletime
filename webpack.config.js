@@ -1,7 +1,7 @@
 var webpack = require('webpack');
  
 module.exports = {
-  entry: './Root.jsx',
+  entry: './Shelf.jsx',
   output: {path: __dirname, filename: 'bundle.js' },
  
   module: {
