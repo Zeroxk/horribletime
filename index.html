@@ -4,16 +4,23 @@
     <head>
         <meta charset="UTF-8">
 
-        <!-- This window's stylesheet -->
-        <link rel="stylesheet" type="text/css" href="app.css">
-
-        <!-- Library for retrieving show information from the site -->
-        <script src="hsub.js"></script>
+        <style>
+            body {
+                font-family: "Open Sans", sans-serif;
+                color: white;
+                background-color: #151515;
+            }
+        </style>
 
         <!-- Window title -->
         <title>HorribleTime!</title>
   </head>
 
   <!-- Show anime shows provided by HorribleSubs here. -->
-  <body onload="init()"></body>
+  <body>
+      <div id="root"></div>
+  </body>
+
+  <!-- The compiled React-code -->
+  <script src="bundle.js"></script>
 </html>
