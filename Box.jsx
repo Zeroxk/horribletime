@@ -18,8 +18,10 @@ export default class Box extends React.Component {
 
         // Save link to show page.
         this.href  = props.show.firstChild.href;
+
         // Save show title.
-        this.title = props.show.firstChild.innerText;
+        //this.title = props.show.firstChild.innerText;
+        this.title = props.show.firstChild.title;
     }
 
     // Get the built original DOM object here.
