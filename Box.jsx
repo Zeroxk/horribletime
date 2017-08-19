@@ -4,35 +4,33 @@ import ReactDOM from 'react-dom';
 import Show               from './Show.jsx'
 import { margin }         from './Margin.css'
 import { title, height }  from './Box.css'
+import { selfDoDoc }      from './Ajax.jsx'
+
+// Import jQuery from npm.
+global.$ = require('jquery');
+// Import jQuery.appear from npm.
+require('jquery-appear-poetic');
 
 // The anime show box displayed on a grid shelf.
 export default class Box extends React.Component {
     // Construct anime box.
-    constructor(o) {
-        this.state = {
-            dom: 
-                (<div>
-                    <div className={height}>
-                        {/* Boxart image is placed here. */}
-                        <div className={margin + ' ' + title} onClick={this.changeToShow}>
-                            <b>{this.title}</b>
-                        </div>
-                    </div>
-                </div>)
-        };
+    constructor(props) {
+        super(props);
 
         // Save link to show page.
-        this.href  = o.firstChild.href;
+        this.href  = props.show.firstChild.href;
         // Save show title.
-        this.title = o.firstChild.innerText;
+        this.title = props.show.firstChild.innerText;
+    }
 
+    // Get the built original DOM object here.
+    componentDidMount() {
         // Download boxart image when the <div> is visible (appeared).
         this.shown = false;
         let self = this;
-        // Enable callback on DOM appear.
-        $.appear(this.state.dom);
+        $.appear(this); // Enable callback on DOM appear.
         // Set callback to download show page on appear.
-        $(this.state.dom).on('appear', function(e, appeared) {
+        $(this).on('appear', function(e, appeared) {
             // Check if has already been downloaded and shown.
             if (self.shown)
                 return;
@@ -45,7 +43,7 @@ export default class Box extends React.Component {
         });
 
         // Download and show <img> if it is visible (appeared).
-        if ($(divimg).is(':appeared')) {
+        if ($(this).is(':appeared')) {
             self.shown = true;
             selfDoDoc(self,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
                       self.href,
@@ -80,6 +78,14 @@ export default class Box extends React.Component {
     }
 
     render() {
-        return this.state.dom;
+        return (
+            <div>
+                <div className={height}>
+                    {/* Boxart image is placed here. */}
+                    <div className={margin + ' ' + title} onClick={this.changeToShow}>
+                        <b>{this.title}</b>
+                    </div>
+                </div>
+            </div>);
     }
 }

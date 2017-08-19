@@ -1,13 +1,12 @@
 import React         from 'react';
 
 import { container } from './Shelf.css'
-
-import { doDoc }     from './Ajax.jsx'
 import Show          from './Show.jsx'
 import Box           from './Box.jsx'
+import { doDoc, selfDoDoc } from './Ajax.jsx'
 
 // The shelf of anime show boxes.
-export default class Shows extends React.Component {
+export default class Shelf extends React.Component {
     constructor() {
         super();
 
@@ -19,13 +18,19 @@ export default class Shows extends React.Component {
         document.body.scrollTop = 0;
 
         // Retrieve shows from horriblesubs.info.
-        doDoc('http://horriblesubs.info/shows/', function(response) {
-            var shows = response.getElementsByClassName('ind-show');
-            for (s of shows) {
+        selfDoDoc(this, 'http://horriblesubs.info/shows/', function(self, response) {
+            let shows = response.getElementsByClassName('ind-show');
+            for (let s of shows) {
                 // If show is empty and has no links.
                 if (s.className.includes('linkless'))
                     continue;
-                this.state.boxes.push(new Box(s));
+
+                // Update boxes.
+                let b = self.state.boxes;
+                b.push(<Box show={s} />);
+                self.setState({
+                    boxes: b
+                });
             }
         });
     }

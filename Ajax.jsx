@@ -1,12 +1,12 @@
 // Make AJAX XML HTTP Request to get horriblesubs.info's DOM object.
-function makeAjax() {
+export function makeAjax() {
     var xhttp = new XMLHttpRequest();
     xhttp.responseType = "document";
     return xhttp;
 }
 
 // Do the AJAX GET command.
-function asyncGet(xhttp, url) {
+export function asyncGet(xhttp, url) {
     if (url === undefined)
         return;
     xhttp.open("GET", // Do a HTTP GET.
@@ -16,7 +16,7 @@ function asyncGet(xhttp, url) {
 }
 
 // Asynchronously get document object from URL and respond.
-function doDoc(url, f) {
+export function doDoc(url, f) {
     var xhttp = makeAjax();
     xhttp.onreadystatechange = function() {
         // Was GET successful?
@@ -27,7 +27,7 @@ function doDoc(url, f) {
 }
 
 // Get document object from URL and respond with self.
-function selfDoDoc(self, url, f) {
+export function selfDoDoc(self, url, f) {
     var xhttp = makeAjax();
     xhttp.onreadystatechange = function() {
         // Was GET successful?
