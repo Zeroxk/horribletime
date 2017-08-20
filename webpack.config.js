@@ -3,6 +3,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: './Shelf.jsx',
   output: {path: __dirname, filename: 'bundle.js' },
+  target: "electron",
  
   module: {
     loaders: [

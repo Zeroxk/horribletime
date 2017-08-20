@@ -1,17 +1,23 @@
 import React from 'react';
 
-import { shelf }                    from './Shelf.jsx'
-import { prevScrollTop, emptyBody } from './Box.jsx'
-import { container, margin }        from './Show.css'
+import { emptyBody }         from './Dom.jsx'
+import { prevScrollTop }     from './Box.jsx'
+
+import { shelf }             from './Shelf.jsx'
+import { container, margin } from './Show.css'
 
 // Page to display the show.
 export default class Show extends React.Component {
     constructor(props) {
         super(props);
 
+        this.page   = props.parent.page;
+        this.title  = props.parent.title,
+        this.boxart = props.parent.img;
+
         this.state = {
-            title: props.parent.title
-        }
+            savedir: 'No download directory is set.'
+        };
     }
 
     // Show the shelf again.
@@ -23,14 +29,45 @@ export default class Show extends React.Component {
         document.body.scrollTop = prevScrollTop;
     }
 
+    componentDidMount() {
+        // Insert boxart image.
+        var img = this.boxart.cloneNode();
+        img.style.margin = '10px';
+        this.container.insertAdjacentElement('afterbegin', img);
+
+        // Insert description.
+        var desc            = this.page.getElementsByClassName('series-desc')[0];
+        this.desc.innerText = desc.innerText;
+    }
+
+    openFileDialog() {
+        // Ask user where to save the downloaded files.
+        const { dialog } = require('electron').remote;
+        let dir = dialog.showOpenDialog({properties: ['openDirectory']});
+        if (dir === undefined)
+            return;
+        this.setState({
+            savedir: dir[0]
+        });
+    }
+
     render() {
         return (
             <div>
-                {/* Insert Back-button. */}
+                {/* Back-button. */}
                 <button className={margin} onClick={this.goBackToShelf}>Back</button>
 
-                {/* Insert title. */}
-                <h3 className={margin}>{this.state.title}</h3>
+                {/* Title. */}
+                <h3 className={margin}>{this.title}</h3>
+
+                <div className={container} ref={(o) => { this.container = o; }}>
+                    {/* Image will be later added here by code... */}
+
+                    {/* Description */}
+                    <div className = {margin} ref={(o) => { this.desc = o; }}>
+                    </div>
+                </div>
+                <span className={margin}>{this.state.savedir}</span><button onClick={this.openFileDialog.bind(this)}>Change</button>
             </div>
         )
     }

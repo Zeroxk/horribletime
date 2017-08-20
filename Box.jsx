@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Show                        from './Show.jsx'
-import { title, height, padding }  from './Box.css'
 import { selfDoDoc }               from './Ajax.jsx'
+import { emptyBody }               from './Dom.jsx'
+
+import { title, height, padding }  from './Box.css'
+import Show                        from './Show.jsx'
 
 // Import jQuery from npm.
 global.$ = require('jquery');
@@ -12,13 +14,6 @@ require('jquery-appear-poetic');
 
 // Previous scrollTop of <body>.
 export var prevScrollTop = 0;
-
-// Clear the <body>.
-export function emptyBody() {
-    var n = document.body;
-    while (n.firstChild)
-        n.removeChild(n.firstChild);
-}
 
 // The anime show box displayed on a grid shelf.
 export default class Box extends React.Component {
@@ -55,7 +50,7 @@ export default class Box extends React.Component {
 
             // Download and show boxart.
             dom.shown = true;
-            selfDoDoc(dom,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
+            selfDoDoc(dom, // Provide a reference to 'this' object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
                       dom.href,
                       dom.addBoxArt);
         });
@@ -63,7 +58,7 @@ export default class Box extends React.Component {
         // Download and show <img> if it is visible (appeared).
         if ($(dom).is(':appeared')) {
             dom.shown = true;
-            selfDoDoc(dom,            // Provide reference to this object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
+            selfDoDoc(dom, // Provide a reference to 'this' object, because the global 'this'-variable gets changed to 'undefined' when entering the response-function.
                       dom.href,
                       dom.addBoxArt);
         }
@@ -79,10 +74,13 @@ export default class Box extends React.Component {
         var img = imgs[0].firstChild;
 
         // Change <img> for our purposes.
-        img.className    = 'boxart';
         img.title        = self.title;
         img.href         = self.href;
+        // Set its style.
         img.style.width  = '225px';
+
+        // Save for later use.
+        this.img         = img;
 
         // Append image.
         self.firstChild.appendChild(img);
