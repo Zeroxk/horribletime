@@ -7,6 +7,8 @@ import { container, margin } from './Show.css'
 
 import EpisodeRows           from './EpisodeRows.jsx'
 
+export var savedir = null;
+
 // Page to display the show.
 export default class Show extends React.Component {
     constructor(props) {
@@ -47,6 +49,7 @@ export default class Show extends React.Component {
         let dir = dialog.showOpenDialog({properties: ['openDirectory']});
         if (dir === undefined)
             return;
+        savedir = dir[0];
         this.setState({
             savedir: dir[0]
         });

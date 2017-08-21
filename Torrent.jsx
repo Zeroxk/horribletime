@@ -1,16 +1,16 @@
+// Get save directory.
+import { savedir } from './Show.jsx'
+
 // Create the streaming torrent engine.
 var torrentStream = require('torrent-stream'); // namespace containing functions for streaming torrents.
 var streams = []; // Torrent streams.
-
-// The save directory.
-export var saveDirectory = null;
 
 // Stream the file.
 export function stream(magnet) {
     var engine; // The torrent stream engine.
 
     // Check if the save directory is set.
-    if (saveDirectory === null) {
+    if (savedir === null) {
         alert("No download directory is set!");
         return;
     } else {

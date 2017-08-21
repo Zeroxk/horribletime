@@ -19,6 +19,7 @@ export default class Shelf extends React.Component {
         // Retrieve shows from horriblesubs.info.
         selfDoDoc(this, 'http://horriblesubs.info/shows/', function(self, response) {
             let shows = response.getElementsByClassName('ind-show');
+            var i = 0;
             for (let s of shows) {
                 // If show is empty and has no links.
                 if (s.className.includes('linkless'))
@@ -26,12 +27,14 @@ export default class Shelf extends React.Component {
 
                 // Update boxes.
                 let b = self.state.boxes;
-                b.push(<Box show={s} />);
+                b.push(<Box key={i} show={s} />);
 
                 // Set new state, which re-renders.
                 self.setState({
                     boxes: b
                 });
+
+                ++i; // unique key to squash warning.
             }
         });
     }
