@@ -33,7 +33,14 @@ export default class EpisodeRows extends React.Component {
     // Add an episode row. Called when a page has been finished retrieved.
     add(response) {
         // Is there more episodes to parse?
-        if (response.body.innerText === 'DONE')
+        var rt = response.body.innerText;
+        if (rt === 'There are no individual episodes for this show.') {
+            this.setState({
+                rows: 'There are no individual episodes for this show.'
+            });
+            return;
+        }
+        if (rt === 'DONE')
             return;
 
         // Get magnet links.
