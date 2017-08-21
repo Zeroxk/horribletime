@@ -2,18 +2,19 @@ import React from 'react';
 
 import { emptyBody }         from './Dom.jsx'
 import { prevScrollTop }     from './Box.jsx'
-
 import { shelf }             from './Shelf.jsx'
 import { container, margin } from './Show.css'
+
+import EpisodeRows           from './EpisodeRows.jsx'
 
 // Page to display the show.
 export default class Show extends React.Component {
     constructor(props) {
         super(props);
 
-        this.page   = props.parent.page;
-        this.title  = props.parent.title,
-        this.boxart = props.parent.img;
+        this.page   = props.parent.page;  // horriblesubs.info show page.
+        this.title  = props.parent.title, // title of the show.
+        this.boxart = props.parent.img;   // boxart of the show.
 
         this.state = {
             savedir: 'No download directory is set.'
@@ -68,6 +69,8 @@ export default class Show extends React.Component {
                     </div>
                 </div>
                 <span className={margin}>{this.state.savedir}</span><button onClick={this.openFileDialog.bind(this)}>Change</button>
+
+                <EpisodeRows page={this.page} />
             </div>
         )
     }
