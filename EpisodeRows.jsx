@@ -18,7 +18,7 @@ export default class EpisodeRows extends React.Component {
         super(props);
 
         this.state = {
-            rows: []
+            rows: 'Loading...'
         }
 
         // Get the show id of the show.
@@ -70,9 +70,16 @@ export default class EpisodeRows extends React.Component {
                      </div>);
         }
 
-        this.setState({
-            rows: this.state.rows.concat(eps)
-        });
+        // First time?
+        if (this.nextid === 0) {
+            this.setState({
+                rows: eps
+            });
+        } else {
+            this.setState({
+                rows: this.state.rows.concat(eps)
+            });
+        }
 
         // Look for more episodes.
         ++this.nextid;
