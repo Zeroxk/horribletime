@@ -64,7 +64,7 @@ export default class EpisodeRows extends React.Component {
         }
 
         this.setState({
-            rows: eps
+            rows: this.state.rows.concat(eps)
         });
 
         // Look for more episodes.
