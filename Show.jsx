@@ -19,7 +19,7 @@ export default class Show extends React.Component {
         this.boxart = props.parent.img;   // boxart of the show.
 
         this.state = {
-            savedir: 'No download directory is set.'
+            savedir: savedir === null ? 'No download directory is set.' : savedir
         };
     }
 
