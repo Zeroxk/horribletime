@@ -21,12 +21,17 @@ export default class Box extends React.Component {
     constructor(props) {
         super(props);
 
+        // Do not hide at construct.
+        this.state = {
+            hidden: false,
+            image: <span></span>
+        };
+
         // Save link to show page.
         this.href  = props.show.firstChild.href;
 
         // Save show title.
-        //this.title = props.show.firstChild.innerText;
-        this.title = props.show.firstChild.title;
+        this.title = props.show.firstChild.title == undefined ? '' : props.show.firstChild.title;
     }
 
     // Get the built original DOM object here.
@@ -74,8 +79,7 @@ export default class Box extends React.Component {
         var img = imgs[0].firstChild;
 
         // Change <img> for our purposes.
-        img.title        = self.title;
-        img.href         = self.href;
+        img.title        = this.title;
         // Set its style.
         img.style.width  = '225px';
 
@@ -83,7 +87,10 @@ export default class Box extends React.Component {
         this.img         = img;
 
         // Append image.
-        self.firstChild.appendChild(img);
+        this.setState({
+            hidden: this.state.hidden,
+            image: <img src={img.src} style={{width: '225px'}} />
+        });
     }
 
     // Change to the show page.
@@ -94,23 +101,45 @@ export default class Box extends React.Component {
         prevScrollTop = document.body.scrollTop;
 
         // Show the anime show page.
-        if (this.show === undefined || this.show === null) {
-            this.show = document.createElement('div');
-            ReactDOM.render(<Show parent={this}/>, this.show);
+        if (this.showel === undefined || this.showel === null) {
+            this.showel = document.createElement('div');
+            ReactDOM.render(<Show parent={this}/>, this.showel);
         }
         emptyBody();
-        document.body.appendChild(this.show);
+        document.body.appendChild(this.showel);
+    }
+
+    // Hide box.
+    hide() {
+        if (!this.state.hidden) {
+            // hide.
+            this.setState({
+                hidden: true
+            });
+        }
+    }
+
+    // Show box.
+    show() {
+        if (this.state.hidden) {
+            // show.
+            this.setState({
+                hidden: false
+            });
+        }
     }
 
     // Build React's DOM of the anime box.
     render() {
-        return (<div className={padding} ref={ (o) => {this.dom = o}} onClick={this.changeToShow.bind(this)}>
-                    <div className={height}>
-                        {/* Boxart image <img> is placed here. */}
-                    </div>
-                    <div className={title}>
-                        <b>{this.title}</b>
-                    </div>
-                </div>);
+        return this.state.hidden ? (<div></div>) : (
+            <div className={padding} ref={ (o) => {this.dom = o}} onClick={this.changeToShow.bind(this)}>
+                <div className={height}>
+                    {this.state.image}
+                </div>
+                <div className={title}>
+                    <b>{this.title}</b>
+                </div>
+            </div>
+        );
     }
 }
