@@ -12,7 +12,7 @@ function getShowId(page) {
 }
 
 // Display the episodes in a row.
-export default class EpisodeRows extends React.Component {
+export default class Eps extends React.Component {
     // Construct the display of rows.
     constructor(props) {
         super(props);

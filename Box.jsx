@@ -93,11 +93,13 @@ export default class Box extends React.Component {
 
         prevScrollTop = document.body.scrollTop;
 
-        let show = document.createElement('div');
-        ReactDOM.render(<Show parent={this}/>, show);
-
+        // Show the anime show page.
+        if (this.show === undefined || this.show === null) {
+            this.show = document.createElement('div');
+            ReactDOM.render(<Show parent={this}/>, this.show);
+        }
         emptyBody();
-        document.body.appendChild(show);
+        document.body.appendChild(this.show);
     }
 
     // Build React's DOM of the anime box.

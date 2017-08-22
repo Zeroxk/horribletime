@@ -5,9 +5,8 @@ import { prevScrollTop }     from './Box.jsx'
 import { shelf }             from './Shelf.jsx'
 import { container, margin } from './Show.css'
 
-import EpisodeRows           from './EpisodeRows.jsx'
-
-export var savedir = null;
+import Eps                          from './Eps.jsx'
+import { setdir, register, getdir } from './Torrent.jsx'
 
 // Page to display the show.
 export default class Show extends React.Component {
@@ -18,9 +17,12 @@ export default class Show extends React.Component {
         this.title  = props.parent.title, // title of the show.
         this.boxart = props.parent.img;   // boxart of the show.
 
+        const d = getdir();
         this.state = {
-            savedir: savedir === null ? 'No download directory is set.' : savedir
+            savedir: d === null ? 'No download directory is set.' : d
         };
+
+        register(this.onChangeSaveDir.bind(this));
     }
 
     // Show the shelf again.
@@ -49,11 +51,17 @@ export default class Show extends React.Component {
         let dir = dialog.showOpenDialog({properties: ['openDirectory']});
         if (dir === undefined)
             return;
-        savedir = dir[0];
+        const d = dir[0];
+        // Set save directory.
+        setdir(d)
+    }
+
+    onChangeSaveDir(d) {
         this.setState({
-            savedir: dir[0]
+            savedir: d
         });
     }
+
 
     render() {
         return (
@@ -73,7 +81,7 @@ export default class Show extends React.Component {
                 </div>
                 <span className={margin}>{this.state.savedir}</span><button onClick={this.openFileDialog.bind(this)}>Change</button>
 
-                <EpisodeRows page={this.page} />
+                <Eps page={this.page} />
             </div>
         )
     }

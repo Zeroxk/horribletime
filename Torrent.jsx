@@ -1,9 +1,29 @@
-// Get save directory.
-import { savedir } from './Show.jsx'
-
 // Create the streaming torrent engine.
 var torrentStream = require('torrent-stream'); // namespace containing functions for streaming torrents.
 var streams = []; // Torrent streams.
+
+var savedir   = null;
+var callbacks = [];
+
+// Save save directory.
+export function setdir(path) {
+    savedir = path;
+
+    // Inform everyone that user has changed the directory.
+    for (let c of callbacks) {
+        c(savedir);
+    }
+}
+
+// Register callback to call on directory change, which reports the new save directory set.
+export function register(cb) {
+    callbacks.push(cb);
+}
+
+// Get save directory.
+export function getdir() {
+    return savedir;
+}
 
 // Stream the file.
 export function stream(magnet) {
