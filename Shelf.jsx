@@ -14,7 +14,7 @@ export default class Shelf extends React.Component {
 
         // Set the current scroll-position of the <div>.
         this.state = {
-            boxes: 'Loading horrible shows...',
+            boxes: <div style={{margin: '10px'}}>Loading shows...</div>,
             domboxes: []
         };
 

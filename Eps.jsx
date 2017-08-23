@@ -18,7 +18,7 @@ export default class Eps extends React.Component {
         super(props);
 
         this.state = {
-            rows: 'Loading...'
+            rows: 'Loading episodes...'
         }
 
         // Get the show id of the show.
