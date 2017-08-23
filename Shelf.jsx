@@ -14,7 +14,7 @@ export default class Shelf extends React.Component {
 
         // Set the current scroll-position of the <div>.
         this.state = {
-            boxes: [],
+            boxes: 'Loading horrible shows...',
             domboxes: []
         };
 
@@ -24,6 +24,9 @@ export default class Shelf extends React.Component {
         selfDoDoc(this, 'http://horriblesubs.info/shows/', function(self, response) {
             let shows = response.getElementsByClassName('ind-show');
             var i = 0;
+
+            self.state.boxes = [];
+
             for (let s of shows) {
                 // If show is empty and has no links.
                 if (s.className.includes('linkless'))
